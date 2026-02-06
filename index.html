@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wrestling: Ultimate Technical Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #050505;
+            --primary: #0046ff;
+            --primary-glow: rgba(0, 70, 255, 0.5);
+            --accent: #d1ff00;
+            --accent-glow: rgba(209, 255, 0, 0.3);
+            --glass: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #ffffff;
+            --text-dim: #888888;
+            --mono: 'JetBrains Mono', monospace;
+        }
+
+        * { box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-dark);
+            margin: 0;
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Estrutura de Slides Fullscreen */
+        .presentation-wrapper {
+            width: 100vw;
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            scroll-snap-align: start;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        /* HUD & Background Elements */
+        .grid-bg {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(var(--glass-border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--glass-border) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.2;
+            z-index: 0;
+        }
+
+        .hud-line {
+            position: absolute;
+            background: var(--primary);
+            opacity: 0.3;
+            z-index: 2;
+        }
+
+        /* Tipografia */
+        h1, h2, h3 { font-family: 'Syncopate', sans-serif; text-transform: uppercase; margin: 0; }
+
+        .big-title {
+            font-size: clamp(60px, 10vw, 120px);
+            line-height: 0.8;
+            font-weight: 700;
+            letter-spacing: -5px;
+            background: linear-gradient(180deg, #fff 30%, #444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slide-header {
+            padding: 80px 100px 0;
+            z-index: 10;
+        }
+
+        .slide-header .tag {
+            font-family: var(--mono);
+            color: var(--accent);
+            font-size: 12px;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .slide-header .tag::before {
+            content: ''; width: 40px; height: 1px; background: var(--accent);
+        }
+
+        .content-body {
+            flex: 1;
+            padding: 40px 100px;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Layouts Dinâmicos */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; width: 100%; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; width: 100%; }
+
+        /* Cards Aero-Tech */
+        .tech-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            position: relative;
+            backdrop-filter: blur(10px);
+            transition: 0.5s;
+        }
+
+        .tech-card:hover {
+            border-color: var(--primary);
+            background: rgba(0, 70, 255, 0.05);
+            transform: translateY(-10px);
+        }
+
+        .tech-card .num {
+            position: absolute; top: 20px; right: 20px;
+            font-family: var(--mono); color: var(--primary); font-size: 14px;
+        }
+
+        .tech-card h4 {
+            color: var(--text-main); font-family: 'Syncopate'; font-size: 18px; margin-bottom: 20px;
+        }
+
+        .tech-card p {
+            color: var(--text-dim); line-height: 1.7; font-size: 16px;
+        }
+
+        /* Imagens e Visuals */
+        .visual-frame {
+            position: relative;
+            border: 1px solid var(--primary);
+            padding: 10px;
+        }
+
+        .visual-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: grayscale(1) contrast(1.2);
+            transition: 1s;
+        }
+
+        .visual-frame:hover img { filter: grayscale(0) contrast(1); }
+
+        /* HUD Components */
+        .stat-bar {
+            height: 2px; background: var(--glass-border); width: 100%; margin: 10px 0;
+            position: relative;
+        }
+        .stat-fill {
+            position: absolute; height: 100%; background: var(--primary);
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        /* Side Navigation */
+        .side-nav {
+            position: fixed; left: 40px; top: 50%; transform: translateY(-50%);
+            display: flex; flex-direction: column; gap: 20px; z-index: 100;
+        }
+        .nav-item {
+            width: 10px; height: 10px; border: 1px solid var(--primary);
+            transform: rotate(45deg); transition: 0.3s;
+        }
+        .nav-item.active { background: var(--accent); border-color: var(--accent); transform: rotate(45deg) scale(1.5); }
+
+        /* Animações de Entrada */
+        [data-aos] { opacity: 0; transform: translateY(30px); transition: 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        .slide:target [data-aos], .slide.active [data-aos] { opacity: 1; transform: translateY(0); }
+
+    </style>
+</head>
+<body>
+
+<div class="side-nav">
+    <div class="nav-item active"></div>
+    <div class="nav-item"></div>
+    <div class="nav-item"></div>
+    <div class="nav-item"></div>
+    <div class="nav-item"></div>
+    <div class="nav-item"></div>
+    <div class="nav-item"></div>
+    <div class="nav-item"></div>
+    <div class="nav-item"></div>
+    <div class="nav-item"></div>
+</div>
+
+<div class="presentation-wrapper">
+
+    <!-- SLIDE 1: INTRO -->
+    <section class="slide active" id="s1">
+        <div class="grid-bg"></div>
+        <div class="hud-line" style="width: 1px; height: 100%; left: 80px; top: 0;"></div>
+        <div class="content-body" style="flex-direction: column; justify-content: center; align-items: flex-start;">
+            <div class="tag" style="margin-left: 100px;">SYSTEM_INITIALIZED // V.4.0</div>
+            <h1 class="big-title" style="margin-left: 100px;">WRESTLING<br><span style="color: var(--primary);">PROTOCOL</span></h1>
+            <div style="margin-left: 100px; margin-top: 40px; border-left: 2px solid var(--accent); padding-left: 30px;">
+                <p style="font-family: var(--mono); font-size: 14px; max-width: 500px; color: var(--text-dim);">
+                    MANUAL TÉCNICO DE ALTA PERFORMANCE. ANÁLISE DE REGRAS, BIOMECÂNICA E PONTUAÇÃO OLÍMPICA.
+                </p>
+            </div>
+        </div>
+        <div style="position: absolute; bottom: 50px; right: 80px; font-family: var(--mono); font-size: 10px; color: var(--text-dim);">
+            SCROLL TO EXPLORE_
+        </div>
+    </section>
+
+    <!-- SLIDE 2: DNA TÉCNICO -->
+    <section class="slide" id="s2">
+        <div class="grid-bg"></div>
+        <header class="slide-header">
+            <div class="tag">CLASSIFICAÇÃO_01</div>
+            <h2>DNA DO <span>COMBATE</span></h2>
+        </header>
+        <div class="content-body" style="flex-direction: column; gap: 40px;">
+            <div class="grid-2">
+                <div class="tech-card" data-aos>
+                    <div class="num">ID_GR</div>
+                    <h4>GRECO-ROMANA</h4>
+                    <p>Foco cinético superior. O sistema proíbe qualquer interação com os membros inferiores, forçando um combate de alta pressão no tórax e braços.</p>
+                    <div class="stat-bar"><div class="stat-fill" style="width: 100%;"></div></div>
+                    <small style="color: var(--primary); font-family: var(--mono);">UPPER BODY FOCUS: 100%</small>
+                </div>
+                <div class="tech-card" data-aos style="border-color: var(--accent);">
+                    <div class="num" style="color: var(--accent);">ID_FS</div>
+                    <h4>LUTA LIVRE</h4>
+                    <p>Versatilidade biomecânica total. Permite o uso das pernas como armas ofensivas e pilares defensivos em todos os níveis do tapete.</p>
+                    <div class="stat-bar"><div class="stat-fill" style="width: 100%; background: var(--accent);"></div></div>
+                    <small style="color: var(--accent); font-family: var(--mono);">FULL BODY RANGE: 100%</small>
+                </div>
+            </div>
+            <div class="visual-frame" style="width: 100%; height: 250px;" data-aos>
+                <img src="https://images.unsplash.com/photo-1563844528129-067e06a638e5" alt="Wrestling Action">
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 3: O TAPETE -->
+    <section class="slide" id="s3">
+        <div class="grid-bg"></div>
+        <header class="slide-header">
+            <div class="tag">ARENA_PROTOC</div>
+            <h2>GEOMETRIA DO <span>TAPETE</span></h2>
+        </header>
+        <div class="content-body">
+            <div class="grid-2">
+                <div class="visual-frame">
+                    <img src="https://images.unsplash.com/photo-1684184667281-2c7404213585" alt="Tapete de Wrestling">
+                    <div style="position: absolute; top: 10px; left: 10px; background: var(--primary); padding: 5px 10px; font-size: 10px; font-family: var(--mono);">ZONA_DE_PROTEÇÃO</div>
+                </div>
+                <div>
+                    <h3 style="font-size: 24px; margin-bottom: 20px;">ESPECIFICAÇÕES UWW</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 25px; display: flex; align-items: center; gap: 15px;">
+                            <span style="color: var(--accent); font-weight: 900;">[01]</span>
+                            <span>Área Central: 7 metros de diâmetro de combate ativo.</span>
+                        </li>
+                        <li style="margin-bottom: 25px; display: flex; align-items: center; gap: 15px;">
+                            <span style="color: var(--accent); font-weight: 900;">[02]</span>
+                            <span>Zona de Passividade: Círculo laranja de 1 metro para alerta de fuga.</span>
+                        </li>
+                        <li style="display: flex; align-items: center; gap: 15px;">
+                            <span style="color: var(--accent); font-weight: 900;">[03]</span>
+                            <span>Zona de Proteção: Espaço de segurança de 1.5 metros.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 4: PONTOS DE AMPLITUDE -->
+    <section class="slide" id="s4">
+        <div class="grid-bg"></div>
+        <header class="slide-header">
+            <div class="tag">SCORE_SYSTEM</div>
+            <h2>HIERARQUIA DE <span>PONTOS</span></h2>
+        </header>
+        <div class="content-body" style="flex-direction: column; gap: 40px;">
+            <div class="grid-3">
+                <div class="tech-card" style="text-align: center;">
+                    <h1 style="font-size: 60px; color: var(--accent);">05</h1>
+                    <h4>AMPLITUDE</h4>
+                    <p>Arremessos em arco que forçam o oponente a perder contacto total com o solo.</p>
+                </div>
+                <div class="tech-card" style="text-align: center;">
+                    <h1 style="font-size: 60px; color: var(--primary);">04</h1>
+                    <h4>PROJEÇÃO</h4>
+                    <p>Quedas de grande perigo que levam o adversário diretamente para as costas.</p>
+                </div>
+                <div class="tech-card" style="text-align: center;">
+                    <h1 style="font-size: 60px; color: #fff;">02</h1>
+                    <h4>CONTROLE</h4>
+                    <p>Derrubar e estabelecer domínio por trás (Go-behind) ou rolar o adversário.</p>
+                </div>
+            </div>
+            <div class="visual-frame" style="width: 100%; height: 250px;" data-aos>
+                <img src="https://images.unsplash.com/photo-1576149146095-caa19d4de102" alt="High Throw Action">
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 5: GRECO ROMANA DEEP DIVE -->
+    <section class="slide" id="s5">
+        <div class="grid-bg"></div>
+        <header class="slide-header">
+            <div class="tag">RESTRIÇÃO_TECH</div>
+            <h2>FORÇA <span>GRECO</span></h2>
+        </header>
+        <div class="content-body">
+            <div class="grid-2">
+                <div>
+                    <h3 style="color: var(--primary); margin-bottom: 20px;">LIMITES DO TRONCO</h3>
+                    <p style="font-size: 20px;">Na Greco-Romana, a luta é um xadrez de alavancas superiores. É proibido:</p>
+                    <div style="margin-top: 30px; display: grid; gap: 15px;">
+                        <div style="background: rgba(255,0,0,0.1); padding: 20px; border-left: 4px solid #ff3333;">
+                            <strong style="color: #fff;">ATAQUE INFERIOR:</strong> Tocar pernas com as mãos.
+                        </div>
+                        <div style="background: rgba(255,0,0,0.1); padding: 20px; border-left: 4px solid #ff3333;">
+                            <strong style="color: #fff;">DEFESA INFERIOR:</strong> Usar pernas para bloquear projeções.
+                        </div>
+                    </div>
+                </div>
+                <div class="visual-frame">
+                    <img src="https://images.unsplash.com/photo-1541337082051-5959dbb57d5d" alt="Combate Greco-Romano">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 6: LIVRE E AGILIDADE -->
+    <section class="slide" id="s6">
+        <div class="grid-bg"></div>
+        <header class="slide-header">
+            <div class="tag">DYNAMIC_RANGE</div>
+            <h2>FLUXO <span>LIVRE</span></h2>
+        </header>
+        <div class="content-body">
+            <div class="grid-2">
+                <div class="visual-frame">
+                    <img src="https://images.unsplash.com/photo-1533777528790-c6996cffa35e" alt="Takedown Luta Livre">
+                </div>
+                <div>
+                    <h3 style="color: var(--accent); margin-bottom: 20px;">ATAQUES DE NÍVEL</h3>
+                    <p>A Luta Livre (Freestyle) foca na transição entre níveis. O "Shot" (entrada explosiva nas pernas) é o movimento assinatura.</p>
+                    <div class="tech-card" style="margin-top: 30px;">
+                        <h4 style="font-size: 14px;">MÉTRICAS DE PERFORMANCE</h4>
+                        <div class="stat-bar">Explosividade <div class="stat-fill" style="width: 90%; background: var(--accent);"></div></div>
+                        <div class="stat-bar">Resistência <div class="stat-fill" style="width: 85%; background: var(--accent);"></div></div>
+                        <div class="stat-bar">Agilidade <div class="stat-fill" style="width: 95%; background: var(--accent);"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 7: O TOUCHÉ -->
+    <section class="slide" id="s7" style="background: linear-gradient(135deg, #050505 0%, #300 100%);">
+        <div class="grid-bg"></div>
+        <div class="content-body" style="text-align: center; flex-direction: column; justify-content: center; gap: 40px;">
+            <div class="tag" style="justify-content: center;">TERMINAL_OBJECTIVE</div>
+            <h1 style="font-size: 120px; letter-spacing: 10px; color: #ff3333; text-shadow: 0 0 30px rgba(255,0,0,0.5);">TOUCHÉ</h1>
+            <h2 style="font-size: 24px; margin-top: -20px;">O "FIM DE JOGO" INSTANTÂNEO</h2>
+            <p style="max-width: 700px; margin: 0 auto; font-size: 18px; color: #ccc;">
+                Quando os dois ombros do adversário são fixados contra o tapete. Não importa a pontuação no placar; o combate encerra-se imediatamente com a vitória do executor.
+            </p>
+            <div class="visual-frame" style="max-width: 600px; margin: 0 auto; width: 100%; height: 200px;" data-aos>
+                <img src="https://images.unsplash.com/photo-1611338631743-b0362363f417" alt="Pin Attempt">
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 8: TABELA DE COMPARAÇÃO HUD -->
+    <section class="slide" id="s8">
+        <div class="grid-bg"></div>
+        <header class="slide-header">
+            <div class="tag">DATA_ANALYSIS</div>
+            <h2>PROTOCOLO <span>COMPARATIVO</span></h2>
+        </header>
+        <div class="content-body">
+            <table style="width: 100%; border-collapse: collapse; font-family: var(--mono);">
+                <tr style="border-bottom: 2px solid var(--primary);">
+                    <th style="padding: 20px; text-align: left; color: var(--accent);">PARÂMETRO</th>
+                    <th style="padding: 20px; text-align: left;">GRECO-ROMANA</th>
+                    <th style="padding: 20px; text-align: left;">LUTA LIVRE</th>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--glass-border);">
+                    <td style="padding: 25px 20px;">POSTURA</td>
+                    <td>Vertical / Erguida</td>
+                    <td>Baixa / Agachada</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--glass-border);">
+                    <td style="padding: 25px 20px;">CONTATO INICIAL</td>
+                    <td>Pescoço e Braços</td>
+                    <td>Distância / Toque de Mão</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--glass-border);">
+                    <td style="padding: 25px 20px;">QUEDAS TÍPICAS</td>
+                    <td>Suplex / Headlock</td>
+                    <td>Double Leg / Single Leg</td>
+                </tr>
+                <tr>
+                    <td style="padding: 25px 20px;">SUPERIORIDADE</td>
+                    <td>8 Pontos de Diferença</td>
+                    <td>10 Pontos de Diferença</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <!-- SLIDE 9: EVOLUÇÃO E ÉTICA -->
+    <section class="slide" id="s9">
+        <div class="grid-bg"></div>
+        <header class="slide-header">
+            <div class="tag">HISTORY_LOG</div>
+            <h2>CÓDIGO DE <span>HONRA</span></h2>
+        </header>
+        <div class="content-body">
+            <div class="grid-2">
+                <div class="visual-frame" data-aos>
+                    <img src="https://images.unsplash.com/photo-1599058917212-d750089bc07e" alt="Wrestling Honor">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div class="tech-card" data-aos>
+                        <h4>VALORES OLÍMPICOS</h4>
+                        <p>O Wrestling é o desporto mais antigo do mundo. A ética exige o aperto de mãos antes e depois do combate, e o respeito absoluto ao árbitro.</p>
+                    </div>
+                    <div class="tech-card" data-aos>
+                        <h4>EVOLUÇÃO FEMININA</h4>
+                        <p>Desde 2004, a Luta Livre feminina tornou-se um dos pilares de audiência dos Jogos Olímpicos, elevando o nível técnico global.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 10: OUTRO -->
+    <section class="slide" id="s10" style="background: var(--primary);">
+        <div class="grid-bg" style="opacity: 0.1;"></div>
+        <div class="content-body" style="flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+            <div class="tag" style="color: #fff; border-color: #fff;">END_OF_TRANSIMISSION</div>
+            <h1 style="font-size: 80px; color: #fff;">DOMINA O<br>TAPETE</h1>
+            <div style="width: 100px; height: 4px; background: var(--accent); margin: 40px 0;"></div>
+            <p style="font-family: 'Syncopate'; font-size: 14px; letter-spacing: 5px;">WRESTLING PERFORMANCE MANUAL v4.0</p>
+            <div style="margin-top: 50px; font-family: var(--mono); font-size: 10px; opacity: 0.7;">
+                PRODUCED BY PERFORMANCE DEPT // 2024
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script>
+    // Sistema Simples de Navegação de Slides
+    const slides = document.querySelectorAll('.slide');
+    const navItems = document.querySelectorAll('.nav-item');
+    const wrapper = document.querySelector('.presentation-wrapper');
+
+    wrapper.addEventListener('scroll', () => {
+        let current = "";
+        slides.forEach((slide, index) => {
+            const slideTop = slide.offsetTop;
+            if (wrapper.scrollTop >= slideTop - 100) {
+                current = index;
+            }
+        });
+
+        navItems.forEach((item, index) => {
+            item.classList.remove('active');
+            if (index === current) {
+                item.classList.add('active');
+                slides[index].classList.add('active');
+            }
+        });
+    });
+
+    // Iniciar animação no primeiro slide
+    window.onload = () => {
+        slides[0].classList.add('active');
+    };
+</script>
+
+</body>
+</html>
