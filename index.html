@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WRESTLING PROTOCOL | Technical Performance Guide</title>
+    <title>LUTA OLÍMPICA | Guia Técnico de Performance</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -390,10 +390,10 @@
     <div class="presentation-wrapper">
 
         <!-- SLIDE 1: INTRO -->
-        <section class="slide active" id="s1">
+        <section class="slide active" id="s1" style="background-image: linear-gradient(rgba(5,5,5,0.7), rgba(5,5,5,0.7)), url('https://images.unsplash.com/photo-1509121701760-466d6d847864?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center;">
             <div class="grid-overlay"></div>
             <div class="hud-line-v"></div>
-            <div class="container">
+            <div class="container" style="z-index: 5;">
                 <div data-aos>
                     <div class="tag">SYSTEM_BOOT // VERSION_4.2</div>
                     <h1 class="big-title">LUTA OLÍMPICA</h1>
@@ -582,15 +582,23 @@
         <!-- SLIDE 7: TOUCHÉ -->
         <section class="slide" id="s7" style="background: radial-gradient(circle at center, #200 0%, #050505 100%);">
             <div class="grid-overlay"></div>
-            <div class="container" style="text-align: center; align-items: center;">
-                <div data-aos>
-                    <div class="tag" style="justify-content: center;">TERMINAL_OBJECTIVE <span class="presenter" style="color: #ff3333; margin-left: 15px;">ARTHUR DOS REIS</span></div>
-                    <h1 class="big-title" style="color: #ff3333; background: none; -webkit-text-fill-color: #ff3333; text-shadow: 0 0 40px rgba(255,0,0,0.6); margin-bottom: 20px;">TOUCHÉ</h1>
-                    <h2 style="font-size: clamp(20px, 3vw, 32px); margin-bottom: 30px;">VITÓRIA POR ENCOSTO INSTANTÂNEO</h2>
-                    <p style="max-width: 800px; color: var(--text-dim); font-size: 18px; margin-bottom: 50px;">
-                        Ocorre quando o executor fixa ambos os ombros do adversário contra o tapete de forma controlada. É o nocaute técnico do Wrestling: encerra o combate imediatamente, independentemente do placar.
-                    </p>
-                    <div class="visual-frame" style="max-width: 700px; height: 300px;">
+            <div class="container">
+                <header class="slide-header" data-aos>
+                    <div class="tag">TERMINAL_OBJECTIVE</div>
+                    <h2 style="color: #ff3333; text-shadow: 0 0 20px rgba(255,0,0,0.4);">TOUCHÉ <span>PROTOCOL</span> <span class="presenter" style="color: #ff3333;">ARTHUR DOS REIS</span></h2>
+                </header>
+                <div class="grid-2">
+                    <div data-aos data-aos-delay="100">
+                        <h3 style="font-size: 24px; margin-bottom: 25px; border-bottom: 1px solid #ff3333; display: inline-block; padding-bottom: 5px;">VITÓRIA POR ENCOSTO</h3>
+                        <p style="font-size: 18px; color: var(--text-dim); margin-bottom: 30px;">
+                            Ocorre quando o executor fixa ambos os ombros do adversário contra o tapete de forma controlada. É o nocaute técnico do Wrestling: encerra o combate imediatamente.
+                        </p>
+                        <div style="background: rgba(255, 51, 51, 0.1); padding: 25px; border-left: 4px solid #ff3333; backdrop-filter: blur(5px);">
+                            <strong style="display: block; color: #fff; margin-bottom: 5px; font-family: var(--mono);">CONDIÇÃO TERMINAL:</strong>
+                            <span style="color: var(--text-dim);">Imobilização total das costas no solo por tempo suficiente para confirmação visual do árbitro.</span>
+                        </div>
+                    </div>
+                    <div class="visual-frame" data-aos data-aos-delay="200" style="height: 450px;">
                         <img src="https://images.unsplash.com/photo-1611338631743-b0362363f417?auto=format&fit=crop&q=80&w=1200" alt="The Pin">
                     </div>
                 </div>
@@ -652,7 +660,7 @@
             <div class="container">
                 <header class="slide-header">
                     <div class="tag">LEGACY_LOG</div>
-                    <h2>CÓDIGO DE <span>HONRA</span> <span class="presenter" style="color: #fff;">NIRRA</span></h2>
+                    <h2>CÓDIGO DE <span>HONRA</span> <span class="presenter" style="color: #fff;">NIRRAL</span></h2>
                 </header>
                 <div class="grid-2">
                     <div class="visual-frame" style="height: 450px;">
@@ -673,9 +681,12 @@
         </section>
 
         <!-- SLIDE 10: OUTRO -->
-        <section class="slide" id="s10" style="background: var(--primary);">
+        <section class="slide" id="s10" style="background: #000;">
             <div class="grid-overlay" style="opacity: 0.1;"></div>
-            <div class="container" style="text-align: center; align-items: center;">
+            <div style="position: absolute; inset: 0; z-index: 1; opacity: 0.4;">
+                <img src="https://images.unsplash.com/photo-1510520434124-5bc7e642b61d?q=80&w=1974&auto=format&fit=crop" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) brightness(0.3) contrast(1.2);">
+            </div>
+            <div class="container" style="text-align: center; align-items: center; z-index: 5;">
                 <div>
                     <div class="tag" style="justify-content: center; color: #fff; border-color: #fff;">END_OF_TRANSMISSION</div>
                     <h1 class="big-title" style="color: #fff; background: none; -webkit-text-fill-color: #fff;">DOMINA O<br>TAPETE</h1>
